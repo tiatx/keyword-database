@@ -519,7 +519,7 @@ Some terms have been reviewed for intellectual property and relevance, but not a
 <div class="controls">
 
 <label>
-<span>Database</span>
+<span id="databaseLabel">Database</span>
 <select id="databaseSelect"></select>
 </label>
 
@@ -665,7 +665,13 @@ opt.textContent=db.name
 dbSelect.appendChild(opt)
 })
 
+updateDatabaseLabel()
 updateDates()
+}
+
+function updateDatabaseLabel(){
+const totalDatabases=DATABASES.length
+document.getElementById("databaseLabel").textContent=`Database (${totalDatabases})`
 }
 
 function updateDates(){
