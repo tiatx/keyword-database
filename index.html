@@ -15,7 +15,7 @@ box-sizing: border-box;
 
 body{
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: #1a1a1a;
 margin: 0;
 padding: 20px;
 min-height: 100vh;
@@ -37,7 +37,7 @@ overflow: hidden;
 }
 
 .header{
-background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+background: linear-gradient(135deg, #00bfa5 0%, #00897b 100%);
 color: white;
 padding: 40px 40px 30px;
 position: relative;
@@ -51,7 +51,7 @@ top: -50%;
 right: -10%;
 width: 400px;
 height: 400px;
-background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
 border-radius: 50%;
 }
 
@@ -77,26 +77,26 @@ padding: 40px;
 }
 
 .info-box{
-background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
-border-left: 4px solid #1976d2;
+background: linear-gradient(135deg, #e0f2f1 0%, #f1f8f7 100%);
+border-left: 4px solid #00bfa5;
 padding: 20px 24px;
 margin-bottom: 24px;
 font-size: 14px;
 color: #1a1a1a;
 border-radius: 8px;
 line-height: 1.6;
-box-shadow: 0 2px 8px rgba(25,118,210,0.1);
+box-shadow: 0 2px 8px rgba(0,191,165,0.1);
 }
 
 .info-box a{
-color: #1976d2;
+color: #00897b;
 font-weight: 600;
 text-decoration: none;
 transition: color 0.2s;
 }
 
 .info-box a:hover{
-color: #1565c0;
+color: #00695c;
 text-decoration: underline;
 }
 
@@ -151,8 +151,8 @@ user-select: auto;
 
 input:focus, select:focus{
 outline: none;
-border-color: #1976d2;
-box-shadow: 0 0 0 3px rgba(25,118,210,0.1);
+border-color: #00bfa5;
+box-shadow: 0 0 0 3px rgba(0,191,165,0.1);
 }
 
 input::placeholder{
@@ -186,7 +186,7 @@ gap: 6px;
 
 .table-hint::before{
 content: 'ℹ';
-background: #2196f3;
+background: #00bfa5;
 color: white;
 width: 20px;
 height: 20px;
@@ -211,9 +211,11 @@ border: 2px solid #e0e0e0;
 .table-wrapper{
 background: white;
 border-radius: 12px;
-overflow: hidden;
+overflow: auto;
+max-height: 600px;
 box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 border: 1px solid #e0e0e0;
+position: relative;
 }
 
 table{
@@ -248,8 +250,8 @@ background: linear-gradient(180deg, #f5f5f5 0%, #eeeeee 100%);
 }
 
 th.sorted{
-background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 100%);
-color: #1976d2;
+background: linear-gradient(180deg, #e0f2f1 0%, #b2dfdb 100%);
+color: #00897b;
 }
 
 .sort-icon{
@@ -292,14 +294,14 @@ color: #616161;
 padding: 6px 14px;
 margin-right: 12px;
 cursor: pointer;
-background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+background: linear-gradient(135deg, #00bfa5 0%, #00897b 100%);
 color: white;
 border: none;
 border-radius: 6px;
 font-size: 12px;
 font-weight: 600;
 transition: all 0.2s;
-box-shadow: 0 2px 4px rgba(25,118,210,0.2);
+box-shadow: 0 2px 4px rgba(0,191,165,0.2);
 text-transform: uppercase;
 letter-spacing: 0.3px;
 
@@ -311,14 +313,14 @@ user-select: auto;
 }
 
 .copyBtn:hover{
-background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
-box-shadow: 0 4px 8px rgba(25,118,210,0.3);
+background: linear-gradient(135deg, #00897b 0%, #00695c 100%);
+box-shadow: 0 4px 8px rgba(0,191,165,0.3);
 transform: translateY(-1px);
 }
 
 .copyBtn:active{
 transform: translateY(0);
-box-shadow: 0 2px 4px rgba(25,118,210,0.2);
+box-shadow: 0 2px 4px rgba(0,191,165,0.2);
 }
 
 .pagination{
@@ -349,10 +351,10 @@ user-select: auto;
 }
 
 .pagination button:hover:not(:disabled){
-background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+background: linear-gradient(135deg, #00bfa5 0%, #00897b 100%);
 color: white;
-border-color: #1976d2;
-box-shadow: 0 4px 8px rgba(25,118,210,0.2);
+border-color: #00bfa5;
+box-shadow: 0 4px 8px rgba(0,191,165,0.2);
 transform: translateY(-2px);
 }
 
@@ -421,7 +423,7 @@ gap: 12px;
 
 <div class="header">
 <h1>Etsy Keyword Database</h1>
-<div class="subtitle">Professional Keyword Research Tool by Tia TX ©</div>
+<div class="subtitle">By Tia TX ©</div>
 </div>
 
 <div class="content">
@@ -556,7 +558,7 @@ let currentData=[]
 let sortDir={}
 let currentSortCol=null
 
-let pageSize=2000
+let pageSize=500
 let currentPage=1
 
 function init(){
