@@ -17,7 +17,7 @@ body{
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 background: #1a1a1a;
 margin: 0;
-padding: 0;
+padding: 40px 20px 0 20px;
 min-height: 100vh;
 
 /* Disable text selection */
@@ -378,9 +378,42 @@ border-radius: 8px;
 border: 2px solid #e0e0e0;
 }
 
+.clear-filters-btn{
+width: 100%;
+padding: 14px 24px;
+margin-bottom: 32px;
+cursor: pointer;
+background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+color: white;
+border: none;
+border-radius: 8px;
+font-size: 14px;
+font-weight: 600;
+transition: all 0.2s;
+box-shadow: 0 2px 8px rgba(244,67,54,0.3);
+text-transform: uppercase;
+letter-spacing: 0.5px;
+
+user-select: auto;
+-webkit-user-select: auto;
+-moz-user-select: auto;
+-ms-user-select: auto;
+}
+
+.clear-filters-btn:hover{
+background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+box-shadow: 0 4px 12px rgba(244,67,54,0.4);
+transform: translateY(-2px);
+}
+
+.clear-filters-btn:active{
+transform: translateY(0);
+box-shadow: 0 2px 8px rgba(244,67,54,0.3);
+}
+
 @media (max-width: 768px){
 body{
-padding: 0;
+padding: 20px 10px 0 10px;
 }
 
 .container{
@@ -515,6 +548,8 @@ Some terms have been reviewed for intellectual property and relevance, but not a
 </label>
 
 </div>
+
+<button id="clearFiltersBtn" class="clear-filters-btn">Clear All Filters</button>
 
 <div class="table-section">
 
@@ -825,6 +860,23 @@ loadCSV(this.value)
 
 document.querySelectorAll("#minSearch,#maxResults,#minRatio,#keywordFilter")
 .forEach(el=>el.addEventListener("input",debouncedFilter))
+
+document.getElementById("clearFiltersBtn").addEventListener("click",clearAllFilters)
+
+function clearAllFilters(){
+document.getElementById("minSearch").value=""
+document.getElementById("maxResults").value=""
+document.getElementById("minRatio").value=""
+document.getElementById("keywordFilter").value=""
+
+currentData=[...tableData]
+sortDir={}
+currentSortCol=null
+currentPage=1
+
+updateSortUI()
+renderTable()
+}
 
 init()
 
