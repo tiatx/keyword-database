@@ -81,6 +81,22 @@ padding:5px 10px;
 margin-right:10px;
 cursor:pointer;
 }
+
+.pagination{
+margin-top:20px;
+display:flex;
+gap:10px;
+align-items:center;
+font-size:14px;
+}
+
+.pagination button{
+padding:6px 12px;
+cursor:pointer;
+border:1px solid #ccc;
+background:white;
+border-radius:4px;
+}
 </style>
 
 </head>
@@ -96,7 +112,7 @@ Database
 <select id="databaseSelect"></select>
 </label>
 
-<label>
+<label title="All this data was collected using Etsy's official Marketplace Insights tool, not external keyword tools.">
 Date
 <select id="dateSelect"></select>
 </label>
@@ -140,30 +156,36 @@ Search Keywords
 
 </table>
 
+<div class="pagination">
+<button onclick="prevPage()">Previous</button>
+<span id="pageInfo"></span>
+<button onclick="nextPage()">Next</button>
+</div>
+
 <script>
 
 const DATABASES = [
-
 {
 name:"Top Etsy Search Terms",
 dates:{
 "Q4 2025":"Top-etsy-search-terms-q4-2025.csv"
 }
 },
-
 {
 name:"Hat Keywords",
 dates:{
 "Q1 2026":"Hat-terms-Q1-2026.csv"
 }
 }
-
 ];
 
 let tableData=[]
 let currentData=[]
 let sortDir={}
 let currentSortCol=null
+
+let pageSize = 2000
+let currentPage = 1
 
 function init(){
 
@@ -219,17 +241,22 @@ ratio:parseFloat(r[3])
 }))
 
 currentData=[...tableData]
+currentPage=1
 
-renderTable(currentData)
+renderTable()
 
 }
 
-function renderTable(data){
+function renderTable(){
 
 const body=document.getElementById("tableBody")
 body.innerHTML=""
 
-data.forEach(row=>{
+const start=(currentPage-1)*pageSize
+const end=start+pageSize
+const pageData=currentData.slice(start,end)
+
+pageData.forEach(row=>{
 
 const tr=document.createElement("tr")
 
@@ -247,6 +274,35 @@ body.appendChild(tr)
 
 })
 
+updatePageInfo()
+
+}
+
+function updatePageInfo(){
+
+const totalPages=Math.ceil(currentData.length/pageSize)
+document.getElementById("pageInfo").textContent=
+"Page "+currentPage+" of "+(totalPages||1)
+
+}
+
+function nextPage(){
+
+const totalPages=Math.ceil(currentData.length/pageSize)
+if(currentPage<totalPages){
+currentPage++
+renderTable()
+}
+
+}
+
+function prevPage(){
+
+if(currentPage>1){
+currentPage--
+renderTable()
+}
+
 }
 
 function copyKeyword(text){
@@ -263,16 +319,15 @@ const minRatio=parseFloat(document.getElementById("minRatio").value)||0
 const keyword=document.getElementById("keywordFilter").value.toLowerCase()
 
 filtered=filtered.filter(row=>{
-
 return row.searches>=minSearch &&
 row.results<=maxResults &&
 row.ratio>=minRatio &&
 row.keyword.toLowerCase().includes(keyword)
-
 })
 
 currentData=filtered
-renderTable(filtered)
+currentPage=1
+renderTable()
 
 }
 
@@ -295,8 +350,7 @@ return sortDir[col]?A.localeCompare(B):B.localeCompare(A)
 })
 
 updateSortUI()
-
-renderTable(currentData)
+renderTable()
 
 }
 
