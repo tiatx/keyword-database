@@ -702,6 +702,7 @@ searches:parseFloat(r[1]),
 results:parseFloat(r[2]),
 ratio:parseFloat(r[3])
 }))
+.filter(r=>!isNaN(r.searches) && !isNaN(r.results) && !isNaN(r.ratio))
 
 currentData=[...tableData]
 currentPage=1
