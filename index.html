@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ultimate Etsy Keyword Database</title>
+
+<style>
+body{
+font-family: Arial, sans-serif;
+background:#fafafa;
+margin:40px auto;
+max-width:1400px;
+}
+
+h1{
+margin-bottom:10px;
+}
+
+.controls{
+display:flex;
+gap:20px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+select,input{
+padding:10px;
+font-size:14px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+table{
+border-collapse:collapse;
+width:100%;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+th,td{
+padding:14px 16px;
+border-bottom:1px solid #ddd;
+text-align:left;
+}
+
+th{
+background:#f4f4f4;
+cursor:pointer;
+position:sticky;
+top:0;
+}
+
+tr:hover{
+background:#f9f9f9;
+}
+
+.copyBtn{
+padding:4px 8px;
+font-size:12px;
+margin-right:8px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Ultimate Etsy Keyword Database</h1>
+
+<div class="controls">
+
+<label>
+Database:
+<select id="databaseSelect">
+<option value="Top-etsy-search-terms-q4-2025.csv">Top Etsy Search Terms</option>
+<option value="Hat-terms-Q1-2026.csv">Hat Keywords</option>
+</select>
+</label>
+
+<input type="text" id="searchBox" placeholder="Filter keywords...">
+
+</div>
+
+<table id="keywordTable">
+
+<thead>
+<tr>
+<th onclick="sortTable(0,'text')">Keyword</th>
+<th onclick="sortTable(1,'num')">Searches</th>
+<th onclick="sortTable(2,'num')">Results</th>
+<th onclick="sortTable(3,'num')">Searches:Results</th>
+</tr>
+</thead>
+
+<tbody id="tableBody"></tbody>
+
+</table>
+
+<script>
+
+let tableData=[];
+let sortDir={};
+
+async function loadCSV(file){
+
+const response = await fetch(file);
+const text = await response.text();
+
+const rows = text.trim().split("\n").map(r=>r.split(","));
+rows.shift();
+
+tableData = rows.map(r=>({
+keyword:r[0],
+searches:r[1],
+results:r[2],
+ratio:r[3]
+}));
+
+renderTable(tableData);
+}
+
+function renderTable(data){
+
+const body=document.getElementById("tableBody");
+body.innerHTML="";
+
+data.forEach(row=>{
+
+const tr=document.createElement("tr");
+
+tr.innerHTML=`
+<td>
+<button class="copyBtn" onclick="copyKeyword('${row.keyword}')">Copy</button>
+${row.keyword}
+</td>
+<td>${row.searches}</td>
+<td>${row.results}</td>
+<td>${row.ratio}</td>
+`;
+
+body.appendChild(tr);
+
+});
+
+sendHeight();
+}
+
+function copyKeyword(text){
+navigator.clipboard.writeText(text);
+}
+
+document.getElementById("databaseSelect").addEventListener("change",function(){
+loadCSV(this.value);
+});
+
+document.getElementById("searchBox").addEventListener("keyup",function(){
+
+const filter=this.value.toLowerCase();
+
+const filtered=tableData.filter(r=>
+r.keyword.toLowerCase().includes(filter)
+);
+
+renderTable(filtered);
+
+});
+
+function sortTable(col,type){
+
+sortDir[col]=!sortDir[col];
+
+tableData.sort((a,b)=>{
+
+let A=Object.values(a)[col];
+let B=Object.values(b)[col];
+
+if(type==="num"){
+A=parseFloat(A);
+B=parseFloat(B);
+return sortDir[col]?A-B:B-A;
+}
+
+return sortDir[col]?A.localeCompare(B):B.localeCompare(A);
+
+});
+
+renderTable(tableData);
+
+}
+
+function sendHeight(){
+const height=document.body.scrollHeight;
+window.parent.postMessage({iframeHeight:height},"*");
+}
+
+loadCSV("Top-etsy-search-terms-q4-2025.csv");
+
+</script>
+
+</body>
+</html>
