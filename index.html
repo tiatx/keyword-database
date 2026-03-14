@@ -828,19 +828,31 @@ const fragment=document.createDocumentFragment()
 const start=(currentPage-1)*pageSize
 const pageData=currentData.slice(start,start+pageSize)
 
-pageData.forEach(row=>{
+pageData.forEach((row,index)=>{
 
 const tr=document.createElement("tr")
 
-tr.innerHTML=`
-<td>
-<button class="copyBtn" onclick="copyKeyword('${row.keyword}')">Copy</button>
-${row.keyword}
-</td>
-<td>${row.searches.toLocaleString()}</td>
-<td>${row.results.toLocaleString()}</td>
-<td>${row.ratio}</td>
-`
+const td1=document.createElement("td")
+const copyBtn=document.createElement("button")
+copyBtn.className="copyBtn"
+copyBtn.textContent="Copy"
+copyBtn.onclick=()=>copyKeyword(row.keyword)
+td1.appendChild(copyBtn)
+td1.appendChild(document.createTextNode(" "+row.keyword))
+
+const td2=document.createElement("td")
+td2.textContent=row.searches.toLocaleString()
+
+const td3=document.createElement("td")
+td3.textContent=row.results.toLocaleString()
+
+const td4=document.createElement("td")
+td4.textContent=row.ratio
+
+tr.appendChild(td1)
+tr.appendChild(td2)
+tr.appendChild(td3)
+tr.appendChild(td4)
 
 fragment.appendChild(tr)
 
